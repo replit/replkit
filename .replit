@@ -1,4 +1,4 @@
-run = "npx tsx index.ts"
+run = "npx tsx ./framework/index.ts"
 
 modules = ["nodejs-18:v3-20230608-f4cd419"]
 
@@ -6,3 +6,6 @@ hidden = [".config", "package-lock.json"]
 
 [deployment]
 run = ["sh", "-c", "node index.js"]
+
+[extension]
+isExtension = true
