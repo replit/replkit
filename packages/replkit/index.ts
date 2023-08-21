@@ -43,21 +43,20 @@ function getConfiguration(homeDir: string) {
     logLevel: 'info',
   }
 
+  const extensionJsonPath = `${homeDirectory}/extension.json`
+
   return  {
     homeDirectory,
     root,
     publicDir,
     outDir,
     config,
+    extensionJsonPath 
   }
 }
 
-// TODO figure out why this takes forever to run
 cli.command('dev <dir>', 'Run the replkit dev server').action(async (homeDir, options) => {
-  console.log('running replkit dev server...');
-  console.log('options', options)
-
-  const {config, homeDirectory, publicDir, root} = getConfiguration(homeDir);
+  const {config, homeDirectory, publicDir, root, extensionJsonPath} = getConfiguration(homeDir);
 
   console.log(`Running in ${homeDirectory}`)
 
@@ -65,7 +64,7 @@ cli.command('dev <dir>', 'Run the replkit dev server').action(async (homeDir, op
 
     // serve extension.json using config file
     server.middlewares.use('/extension.json', (req, res) => {
-      const content = fs.readFileSync(`${homeDirectory}/extension.json`, 'utf-8');
+      const content = fs.readFileSync(extensionJsonPath, 'utf-8');
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(content);
     });
@@ -88,6 +87,10 @@ cli.command('dev <dir>', 'Run the replkit dev server').action(async (homeDir, op
     console.log('Starting server...')
     await server.listen();
     console.log(`Replit extension dev server is active. Visit Extension Devtools and click on 'Load Locally'`);
+
+    fs.watchFile(extensionJsonPath, { persistent: true, interval: 1000 }, (eventType, filename) => {
+      console.log('extension.json changed, you may need to reload your extension to see changes')
+    });
 });
 
 cli.command('build', 'Build extension').action(async (options) => {

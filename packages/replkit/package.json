@@ -5,9 +5,8 @@
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "esbuild index.ts --bundle --outfile=index.js --platform=node --external:lightningcss --external:vite",
-    "replkit:dev": "tsx index.ts dev",
-    "replkit:build": "tsx index.ts build"
+    "build:replkit": "esbuild index.ts --bundle --outfile=index.js --platform=node --external:lightningcss --external:vite",
+    "dev": "tsx index.ts dev"
   },
   "author": "lunaroyster",
   "dependencies": {

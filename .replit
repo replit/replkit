@@ -1,4 +1,4 @@
-run = "npx tsx ./framework/index.ts"
+run = "pnpm run replkit:run-server"
 
 modules = ["nodejs-18:v3-20230608-f4cd419"]
 
