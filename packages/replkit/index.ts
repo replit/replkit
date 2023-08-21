@@ -4,17 +4,17 @@ import { htmlFallbackMiddleware, trailingSlashMiddleware } from './htmlFallbackM
 import { indexHtmlMiddleware } from './indexHtmlMiddleware';
 import fs from 'fs';
 import cac from 'cac';
+import path from 'path'
 
+function resolvePath(userPath) {
+  return path.resolve(process.cwd(), userPath);
+}
 const cli = cac('replkit');
 
-// TODO figure out why this takes forever to run
-cli.command('dev', 'Run the replkit dev server').action((options) => {
-  console.log('running replkit dev server');
-});
-
-async function main() {
-  const homeDirectory = process.cwd();
-  const root = process.cwd() + '/src';
+function getConfiguration(homeDir: string) {
+  const homeDirectory = homeDir ? resolvePath(homeDir) : process.cwd()
+  const root = path.join(homeDirectory, 'src');
+  console.log(root);
   const publicDir = homeDirectory + '/public';
   const outDir = `${homeDirectory}/dist`
   const config: InlineConfig = {
@@ -43,15 +43,25 @@ async function main() {
     logLevel: 'info',
   }
 
-  async function doBuild() {
-    await build(config)
-    // TODO: figure out if there's a more idiomatic way to do this with vite / rollup
-    fs.copyFileSync('extension.json', `${outDir}/extension.json`)
+  return  {
+    homeDirectory,
+    root,
+    publicDir,
+    outDir,
+    config,
   }
+}
 
+// TODO figure out why this takes forever to run
+cli.command('dev <dir>', 'Run the replkit dev server').action(async (homeDir, options) => {
+  console.log('running replkit dev server...');
+  console.log('options', options)
 
-  async function runServer() {
-    const server = await createServer(config);
+  const {config, homeDirectory, publicDir, root} = getConfiguration(homeDir);
+
+  console.log(`Running in ${homeDirectory}`)
+
+  const server = await createServer(config);
 
     // serve extension.json using config file
     server.middlewares.use('/extension.json', (req, res) => {
@@ -78,12 +88,13 @@ async function main() {
     console.log('Starting server...')
     await server.listen();
     console.log(`Replit extension dev server is active. Visit Extension Devtools and click on 'Load Locally'`);
-  }
+});
 
-  await runServer();
-}
-
-// main()
+cli.command('build', 'Build extension').action(async (options) => {
+  await build(config)
+    // TODO: figure out if there's a more idiomatic way to do this with vite / rollup
+    fs.copyFileSync('extension.json', `${outDir}/extension.json`)
+})
 
 cli.help();
 cli.parse();
