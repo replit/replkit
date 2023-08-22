@@ -36,7 +36,7 @@ function getConfiguration(homeDir: string) {
       emptyOutDir: true,
       rollupOptions: {
         input: {
-          'tool': 'src/tool/index.html',
+          'tool': homeDirectory + '/src/tool/index.html',
         }
       }
     },
@@ -45,58 +45,59 @@ function getConfiguration(homeDir: string) {
 
   const extensionJsonPath = `${homeDirectory}/extension.json`
 
-  return  {
+  return {
     homeDirectory,
     root,
     publicDir,
     outDir,
     config,
-    extensionJsonPath 
+    extensionJsonPath
   }
 }
 
 cli.command('dev <dir>', 'Run the replkit dev server').action(async (homeDir, options) => {
-  const {config, homeDirectory, publicDir, root, extensionJsonPath} = getConfiguration(homeDir);
+  const { config, homeDirectory, publicDir, root, extensionJsonPath } = getConfiguration(homeDir);
 
   console.log(`Running in ${homeDirectory}`)
 
   const server = await createServer(config);
 
-    // serve extension.json using config file
-    server.middlewares.use('/extension.json', (req, res) => {
-      const content = fs.readFileSync(extensionJsonPath, 'utf-8');
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(content);
-    });
+  // serve extension.json using config file
+  server.middlewares.use('/extension.json', (req, res) => {
+    const content = fs.readFileSync(extensionJsonPath, 'utf-8');
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(content);
+  });
 
-    // If a /directory is requested, redirect to /directory/ (with the trailing slash) to preserve web behavior
-    server.middlewares.use(trailingSlashMiddleware(root, publicDir))
+  // If a /directory is requested, redirect to /directory/ (with the trailing slash) to preserve web behavior
+  server.middlewares.use(trailingSlashMiddleware(root, publicDir))
 
-    // If requested file doesn't exist, fall back to index.html
-    server.middlewares.use(htmlFallbackMiddleware(root, publicDir, false))
+  // If requested file doesn't exist, fall back to index.html
+  server.middlewares.use(htmlFallbackMiddleware(root, publicDir, false))
 
-    // Process and serve index.html
-    server.middlewares.use(indexHtmlMiddleware(server))
+  // Process and serve index.html
+  server.middlewares.use(indexHtmlMiddleware(server))
 
-    // Return 404 if not found
-    server.middlewares.use(function vite404Middleware(_, res) {
-      res.statusCode = 404
-      res.end()
-    })
+  // Return 404 if not found
+  server.middlewares.use(function vite404Middleware(_, res) {
+    res.statusCode = 404
+    res.end()
+  })
 
-    console.log('Starting server...')
-    await server.listen();
-    console.log(`Replit extension dev server is active. Visit Extension Devtools and click on 'Load Locally'`);
+  console.log('Starting server...')
+  await server.listen();
+  console.log(`Replit extension dev server is active. Visit Extension Devtools and click on 'Load Locally'`);
 
-    fs.watchFile(extensionJsonPath, { persistent: true, interval: 1000 }, (eventType, filename) => {
-      console.log('extension.json changed, you may need to reload your extension to see changes')
-    });
+  fs.watchFile(extensionJsonPath, { persistent: true, interval: 1000 }, (eventType, filename) => {
+    console.log('extension.json changed, you may need to reload your extension to see changes')
+  });
 });
 
-cli.command('build', 'Build extension').action(async (options) => {
-  await build(config)
-    // TODO: figure out if there's a more idiomatic way to do this with vite / rollup
-    fs.copyFileSync('extension.json', `${outDir}/extension.json`)
+cli.command('build <dir>', 'Build extension').action(async (homeDir, options) => {
+  const { config, homeDirectory, publicDir, root, extensionJsonPath, outDir } = getConfiguration(homeDir);
+  const output = await build(config);
+  // TODO: figure out if there's a more idiomatic way to do this with vite / rollup
+  fs.copyFileSync(extensionJsonPath, `${outDir}/extension.json`)
 })
 
 cli.help();
