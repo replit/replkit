@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { fileURLToPath, parse as urlParse } from 'url';
 import { createServer, InlineConfig, build } from 'vite';
 import { htmlFallbackMiddleware, trailingSlashMiddleware } from './htmlFallbackMiddleware';

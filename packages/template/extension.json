@@ -1,1 +1,4 @@
-{}
+{
+  "name": "My extension",
+  "description": "A new Replit Extension"
+}
