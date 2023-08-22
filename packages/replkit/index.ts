@@ -4,6 +4,7 @@ import { createServer, InlineConfig, build } from 'vite';
 import { htmlFallbackMiddleware, trailingSlashMiddleware } from './htmlFallbackMiddleware';
 import { indexHtmlMiddleware } from './indexHtmlMiddleware';
 import fs from 'fs';
+import fsp from 'fs/promises';
 import cac from 'cac';
 import path from 'path'
 
@@ -12,12 +13,36 @@ function resolvePath(userPath) {
 }
 const cli = cac('replkit');
 
-function getConfiguration(homeDir: string) {
+async function getPages(directoryPath: string): Promise<Array<{name: string, path: string}>> {
+  const pages: Array<{name: string, path: string}> = [];
+  const files = await fsp.readdir(directoryPath);
+
+  for (const file of files) {
+    const isDirectory = (await fsp.stat(path.join(directoryPath, file))).isDirectory();
+
+    if (!isDirectory) {
+      continue;
+    }
+
+    const indexHtmlPath = path.join(directoryPath, file, 'index.html');
+    const containsIndexHtml = (await fsp.stat(indexHtmlPath)).isFile();
+
+    if (!containsIndexHtml) {
+      continue;
+    }
+
+    pages.push({name: file, path: indexHtmlPath});
+  }
+
+  return pages;
+}
+
+async function getConfiguration(homeDir: string) {
   const homeDirectory = homeDir ? resolvePath(homeDir) : process.cwd()
   const root = path.join(homeDirectory, 'src');
-  console.log(root);
   const publicDir = homeDirectory + '/public';
   const outDir = `${homeDirectory}/dist`
+  const pages = await getPages(root)
   const config: InlineConfig = {
     root,
     publicDir,
@@ -36,9 +61,7 @@ function getConfiguration(homeDir: string) {
       outDir,
       emptyOutDir: true,
       rollupOptions: {
-        input: {
-          'tool': homeDirectory + '/src/tool/index.html',
-        }
+        input: pages.reduce((acc, val) => ({...acc, [val.name]: val.path}), {})
       }
     },
     logLevel: 'info',
@@ -57,7 +80,7 @@ function getConfiguration(homeDir: string) {
 }
 
 cli.command('dev <dir>', 'Run the replkit dev server').action(async (homeDir, options) => {
-  const { config, homeDirectory, publicDir, root, extensionJsonPath } = getConfiguration(homeDir);
+  const { config, homeDirectory, publicDir, root, extensionJsonPath } = await getConfiguration(homeDir);
 
   console.log(`Running in ${homeDirectory}`)
 
@@ -96,7 +119,7 @@ cli.command('dev <dir>', 'Run the replkit dev server').action(async (homeDir, op
 });
 
 cli.command('build <dir>', 'Build extension').action(async (homeDir, options) => {
-  const { config, homeDirectory, publicDir, root, extensionJsonPath, outDir } = getConfiguration(homeDir);
+  const { config, homeDirectory, publicDir, root, extensionJsonPath, outDir } = await getConfiguration(homeDir);
   const output = await build(config);
   // TODO: figure out if there's a more idiomatic way to do this with vite / rollup
   fs.copyFileSync(extensionJsonPath, `${outDir}/extension.json`)
@@ -107,7 +130,7 @@ cli.help();
 async function main() {
   try {
     const res = await cli.parse();
-    
+
     // if you run the CLI without any args
     if (cli.rawArgs.length === 2) {
       cli.outputHelp();

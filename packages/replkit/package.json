@@ -1,6 +1,6 @@
 {
   "name": "@replit/replkit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A framework for building replit extensions",
   "main": "",
   "scripts": {

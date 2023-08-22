@@ -1,3 +1,7 @@
+## 0.0.3
+
+- index.html resolution
+
 ## 0.0.2
 
 - fixed empty CLI behavior
