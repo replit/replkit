@@ -103,4 +103,19 @@ cli.command('build <dir>', 'Build extension').action(async (homeDir, options) =>
 })
 
 cli.help();
-cli.parse();
+
+async function main() {
+  try {
+    const res = await cli.parse();
+    
+    // if you run the CLI without any args
+    if (cli.rawArgs.length === 2) {
+      cli.outputHelp();
+    }
+  } catch (e) {
+    console.log(`Error: ${e.message}`)
+    cli.outputHelp();
+  }
+}
+
+main();
