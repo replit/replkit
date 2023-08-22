@@ -1,5 +1,5 @@
 {
-  "name": "replkit",
+  "name": "@replit/replkit",
   "version": "0.0.1",
   "description": "A framework for building replit extensions",
   "main": "",
@@ -10,6 +10,14 @@
   "bin": {
     "replkit": "./dist/index.js"
   },
+  "files": [
+    "dist/*"
+  ],
+  "keywords": [
+    "replit",
+    "extensions",
+    "dev-server"
+  ],
   "author": "lunaroyster",
   "dependencies": {
     "@types/connect": "^3.4.35",

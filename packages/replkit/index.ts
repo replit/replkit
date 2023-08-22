@@ -90,7 +90,8 @@ cli.command('dev <dir>', 'Run the replkit dev server').action(async (homeDir, op
   console.log(`Replit extension dev server is active. Visit Extension Devtools and click on 'Load Locally'`);
 
   fs.watchFile(extensionJsonPath, { persistent: true, interval: 1000 }, (eventType, filename) => {
-    console.log('extension.json changed, you may need to reload your extension to see changes')
+    // The  is the Replit prompt symbol
+    console.log(' extension.json changed, you may need to reload your extension to see changes')
   });
 });
 

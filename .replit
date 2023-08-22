@@ -1,4 +1,4 @@
-run = "pnpm run replkit:run-server"
+run = "pnpm dev"
 
 modules = ["nodejs-18:v3-20230608-f4cd419"]
 
