@@ -5,7 +5,8 @@
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "esbuild index.ts --bundle --outfile=dist/index.js --platform=node --external:lightningcss --external:vite"
+    "build": "esbuild index.ts --bundle --outfile=dist/index.js --platform=node --external:lightningcss --external:vite",
+    "clean": "rm -rf dist"
   },
   "bin": {
     "replkit": "./dist/index.js"

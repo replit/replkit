@@ -1,4 +1,10 @@
 {
   "name": "My extension",
-  "description": "A new Replit Extension"
+  "description": "A new Replit Extension",
+  "tools": [
+    {
+      "name": "Example tool",
+      "handler": "/tool"
+    }
+  ]
 }

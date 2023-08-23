@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { createRoot } from 'react-dom/client';
+import { renderExtension } from '@replit/extensions-react';
 
 function Component() {
   return (
     <div>
-      hi there
+      tool
     </div>
   )
 }
 
-createRoot(document.getElementById('root') as Element).render(
+renderExtension(document.getElementById('root') as Element,
   <Component />
 )
