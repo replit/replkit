@@ -6,6 +6,9 @@
     },
     "clean": {
       "dependsOn": ["^clean"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
     }
   }
 }

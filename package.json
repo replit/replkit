@@ -9,9 +9,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "replkit:run-server": "npx tsx packages/replkit/index.ts dev packages/template/",
     "dev": "npx turbo run build && ./packages/replkit/dist/index.js dev ./packages/template",
-    "publish:replkit": "npx turbo run build && cd packages/replkit && pnpm publish"
+    "publish:replkit": "npx turbo run build && cd packages/replkit && pnpm publish",
+    "lint": "npx turbo run lint"
   },
   "devDependencies": {
     "turbo": "^1.10.12"
+  },
+  "dependencies": {
+    "prettier": "^3.0.2"
   }
 }

@@ -5,8 +5,9 @@
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "esbuild index.ts --bundle --outfile=dist/index.js --platform=node --external:lightningcss --external:vite",
-    "clean": "rm -rf dist"
+    "build": "esbuild src/index.ts --bundle --outfile=dist/index.js --platform=node --external:lightningcss --external:vite",
+    "clean": "rm -rf dist",
+    "lint": "npx prettier --write *.ts"
   },
   "bin": {
     "replkit": "./dist/index.js"
@@ -32,6 +33,7 @@
     "cors": "^2.8.5",
     "etag": "^1.8.1",
     "events": "^3.3.0",
+    "json5": "^2.2.3",
     "launch-editor-middleware": "^2.6.0",
     "magic-string": "^0.30.2",
     "node-fetch": "^3.2.6",

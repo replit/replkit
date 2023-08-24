@@ -1,8 +1,8 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import history from 'connect-history-api-fallback'
-import type { Connect } from '@types/connect'
-import { parse as urlParse } from 'url';
+import fs from "node:fs";
+import path from "node:path";
+import history from "connect-history-api-fallback";
+import type { Connect } from "@types/connect";
+import { parse as urlParse } from "url";
 
 function fileExists(path: string) {
   return fs.existsSync(path) && fs.statSync(path).isFile();
@@ -16,16 +16,16 @@ export function trailingSlashMiddleware(root: string, publicDir: string) {
   return function trailingSlashDirectoryRedirectMiddleware(req, res, next) {
     const url = urlParse(req.url);
     const fsPath = path.join(root, url.pathname!);
-    console.log({ pathname: url.pathname })
-    if (dirExists(fsPath) && !url.pathname!.endsWith('/')) {
-      res.writeHead(302, { Location: url.pathname + '/' });
+    console.log({ pathname: url.pathname });
+    if (dirExists(fsPath) && !url.pathname!.endsWith("/")) {
+      res.writeHead(302, { Location: url.pathname + "/" });
       res.end();
 
       return;
     }
 
     next();
-  }
+  };
 }
 
 export function htmlFallbackMiddleware(
@@ -55,10 +55,10 @@ export function htmlFallbackMiddleware(
           // 3. if it exists in root, and is a folder, try returning it + /index.html
           if (dirExists(fsPath)) {
             // console.log(request)
-            const indexFileUrl = path.join(parsedUrl.pathname, 'index.html');
+            const indexFileUrl = path.join(parsedUrl.pathname, "index.html");
             // console.log({ indexFileUrl, file: path.join(root, indexFileUrl) });
             if (fileExists(path.join(root, indexFileUrl))) {
-              return indexFileUrl
+              return indexFileUrl;
             }
           }
 
@@ -67,10 +67,10 @@ export function htmlFallbackMiddleware(
         },
       },
     ],
-  })
+  });
 
   // Keep the named function. The name is visible in debug logs via `DEBUG=connect:dispatcher ...`
   return function viteHtmlFallbackMiddleware(req, res, next) {
-    return historyHtmlFallbackMiddleware(req, res, next)
-  }
+    return historyHtmlFallbackMiddleware(req, res, next);
+  };
 }
