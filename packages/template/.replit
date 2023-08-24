@@ -3,6 +3,8 @@ entrypoint = "src/App.jsx"
 
 hidden = [".config", ".git", ".gitignore"]
 
+modules = ["nodejs-18:v3-20230608-f4cd419"]
+
 [nix]
 channel = "stable-21_11"
 
