@@ -1,3 +1,7 @@
+## 0.0.4
+
+- scaffolding script
+
 ## 0.0.3
 
 - index.html resolution

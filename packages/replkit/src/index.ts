@@ -47,7 +47,7 @@ async function getPages(
   return pages;
 }
 
-async function getConfiguration(homeDir: string) {
+async function getConfiguration(homeDir?: string) {
   const homeDirectory = homeDir ? resolvePath(homeDir) : process.cwd();
   const root = path.join(homeDirectory, "src");
   const publicDir = homeDirectory + "/public";
@@ -92,11 +92,13 @@ async function getConfiguration(homeDir: string) {
   };
 }
 
+cli.option('-C, --home-dir <homeDir>', 'The extension\'s home directory. Assumes the current directory if not provided', {default: process.cwd()});
+
 cli
-  .command("dev <dir>", "Run the replkit dev server")
-  .action(async (homeDir, options) => {
+  .command("dev", "Run the replkit dev server")
+  .action(async (options) => {
     const { config, homeDirectory, publicDir, root, extensionJsonPath } =
-      await getConfiguration(homeDir);
+      await getConfiguration(options.homeDir);
 
     console.log(`Running in ${homeDirectory}`);
 
@@ -143,8 +145,8 @@ cli
   });
 
 cli
-  .command("build <dir>", "Build extension")
-  .action(async (homeDir, options) => {
+  .command("build", "Build extension")
+  .action(async (options) => {
     const {
       config,
       homeDirectory,
@@ -152,15 +154,15 @@ cli
       root,
       extensionJsonPath,
       outDir,
-    } = await getConfiguration(homeDir);
+    } = await getConfiguration(options.homeDir);
     const output = await build(config);
     // TODO: figure out if there's a more idiomatic way to do this with vite / rollup
     fs.copyFileSync(extensionJsonPath, `${outDir}/extension.json`);
   });
 
 cli
-  .command("add <dir> <feature>", "Add a feature to your extension")
-  .action(async (homeDir, feature, options) => {
+  .command("add <feature>", "Add a feature to your extension")
+  .action(async (feature, options) => {
     const {
       config,
       homeDirectory,
@@ -168,7 +170,7 @@ cli
       root,
       extensionJsonPath,
       outDir,
-    } = await getConfiguration(homeDir);
+    } = await getConfiguration(options.homeDir);
 
     const rl = readline.createInterface({
       input: process.stdin,
