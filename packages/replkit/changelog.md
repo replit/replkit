@@ -1,6 +1,7 @@
 ## 0.0.4
 
 - scaffolding script
+- Assume home directory
 
 ## 0.0.3
 

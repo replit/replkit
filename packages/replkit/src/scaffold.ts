@@ -139,3 +139,68 @@ renderExtension(document.getElementById('root') as Element,
     "utf-8",
   );
 }
+
+export async function scaffoldBackground({
+  root,
+  extensionJsonPath,
+}) {
+  const code = {
+    indexHtml: () => `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/replit.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extension Background page</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./main.tsx"></script>
+  </body>
+</html>
+`,
+    mainTsx: () => `
+import * as replit from '@replit/extensions';
+
+async function main() {
+  await replit.messages.showConfirm('Hello World');
+}
+
+main()
+`,
+  };
+
+  const extensionJsonString = await fsp.readFile(extensionJsonPath, {
+    encoding: "utf-8",
+  });
+  const manifest = json5.parse(extensionJsonString);
+
+  if (manifest.background?.page) {
+    throw new Error("Extension already has a background page");
+  }
+
+  const backgroundFolder = path.join(root, 'background');
+  await fsp.mkdir(backgroundFolder);
+  await fsp.writeFile(
+    path.join(backgroundFolder, "index.html"),
+    code.indexHtml(),
+    { encoding: "utf-8" },
+  );
+  await fsp.writeFile(
+    path.join(backgroundFolder, "main.tsx"),
+    code.mainTsx(),
+    { encoding: "utf-8" },
+  );
+
+  const newManifest = {
+    ...manifest,
+    background: {
+      page: "/background",
+    },
+  }
+  await fsp.writeFile(
+    extensionJsonPath,
+    JSON.stringify(newManifest, undefined, 2),
+    "utf-8",
+  );
+};

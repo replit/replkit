@@ -12,7 +12,7 @@ import cac from "cac";
 import path from "path";
 import readline from "readline";
 import json5 from "json5";
-import { scaffoldTool, scaffoldFileHandler } from "./scaffold";
+import { scaffoldTool, scaffoldFileHandler, scaffoldBackground } from "./scaffold";
 
 function resolvePath(userPath) {
   return path.resolve(process.cwd(), userPath);
@@ -188,9 +188,7 @@ cli
         "What is this tool called?\n",
       )) as string;
       await scaffoldTool({ root, toolName, extensionJsonPath });
-    }
-
-    if (feature === "file-handler") {
+    } else if (feature === "file-handler") {
       const fileHandlerName = (await questionAsync(
         "What is this file-handler called?\n",
       )) as string;
@@ -204,6 +202,10 @@ cli
         fileHandlerGlob,
         extensionJsonPath,
       });
+    } else if (feature === "background") {
+      await scaffoldBackground({ root, extensionJsonPath });
+    } else {
+      console.log(`Unknown feature: ${feature}`);
     }
 
     rl.close();
