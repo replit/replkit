@@ -1,8 +1,11 @@
 import * as React from "react";
-import { renderExtension } from "@replit/extensions-react";
+import { render } from "react-dom";
+import { useReplit } from "@replit/extensions-react";
 
 function Component() {
-  return <div>Example tool</div>;
+  const { replit } = useReplit();
+
+  return <div>Replit Extension</div>;
 }
 
-renderExtension(document.getElementById("root") as Element, <Component />);
+render(<Component />, document.getElementById("root") as Element);

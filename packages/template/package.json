@@ -13,9 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "@replit/extensions": "^1.9.0",
-    "@replit/extensions-react": "^0.5.0",
+    "@replit/extensions-react": "^0.6.0",
     "@replit/replkit": "^0.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react-dom": "^18.2.8"
   }
 }
