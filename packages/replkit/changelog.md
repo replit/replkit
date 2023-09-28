@@ -1,3 +1,7 @@
+## 0.0.5
+
+- simple upgrade command
+
 ## 0.0.4
 
 - scaffolding script

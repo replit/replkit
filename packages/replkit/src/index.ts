@@ -13,6 +13,7 @@ import path from "path";
 import readline from "readline";
 import json5 from "json5";
 import { scaffoldTool, scaffoldFileHandler, scaffoldBackground } from "./scaffold";
+import { installReplkit } from "./upgrade";
 
 function resolvePath(userPath) {
   return path.resolve(process.cwd(), userPath);
@@ -47,8 +48,12 @@ async function getPages(
   return pages;
 }
 
+function resolveHomeDirectory(homeDir?: string) {
+  return homeDir ? resolvePath(homeDir) : process.cwd();
+}
+
 async function getConfiguration(homeDir?: string) {
-  const homeDirectory = homeDir ? resolvePath(homeDir) : process.cwd();
+  const homeDirectory = resolveHomeDirectory(homeDir);
   const root = path.join(homeDirectory, "src");
   const publicDir = homeDirectory + "/public";
   const outDir = `${homeDirectory}/dist`;
@@ -92,7 +97,7 @@ async function getConfiguration(homeDir?: string) {
   };
 }
 
-cli.option('-C, --home-dir <homeDir>', 'The extension\'s home directory. Assumes the current directory if not provided', {default: process.cwd()});
+cli.option('-C, --home-dir <homeDir>', 'The extension\'s home directory. Assumes the current directory if not provided', { default: process.cwd() });
 
 cli
   .command("dev", "Run the replkit dev server")
@@ -211,7 +216,20 @@ cli
     rl.close();
   });
 
+cli
+  .command("upgrade", "Upgrade replkit to the latest version")
+  .action(async (options) => {
+    const { homeDirectory } =
+      await getConfiguration(options.homeDir);
+
+    await installReplkit({
+      homeDirectory,
+      version: "latest",
+    });
+  })
+
 cli.help();
+
 
 async function main() {
   try {
