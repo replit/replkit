@@ -1,5 +1,5 @@
 run = "replkit dev"
-entrypoint = "src/App.jsx"
+entrypoint = "src/tool/main.tsx"
 
 hidden = [".config", ".git", ".gitignore"]
 modules = ["nodejs-18:v11-20230920-bd784b9"]
