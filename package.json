@@ -17,6 +17,8 @@
     "turbo": "^1.10.12"
   },
   "dependencies": {
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
     "prettier": "^3.0.2"
   }
 }
