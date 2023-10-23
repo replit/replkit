@@ -160,6 +160,8 @@ export async function scaffoldBackground({ root, extensionJsonPath }) {
 import * as replit from '@replit/extensions';
 
 async function main() {
+  await replit.init();
+  
   await replit.messages.showConfirm('Hello World');
 }
 
