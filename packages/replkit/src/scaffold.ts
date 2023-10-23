@@ -140,10 +140,7 @@ renderExtension(document.getElementById('root') as Element,
   );
 }
 
-export async function scaffoldBackground({
-  root,
-  extensionJsonPath,
-}) {
+export async function scaffoldBackground({ root, extensionJsonPath }) {
   const code = {
     indexHtml: () => `<!DOCTYPE html>
 <html lang="en">
@@ -179,28 +176,26 @@ main()
     throw new Error("Extension already has a background page");
   }
 
-  const backgroundFolder = path.join(root, 'background');
+  const backgroundFolder = path.join(root, "background");
   await fsp.mkdir(backgroundFolder);
   await fsp.writeFile(
     path.join(backgroundFolder, "index.html"),
     code.indexHtml(),
     { encoding: "utf-8" },
   );
-  await fsp.writeFile(
-    path.join(backgroundFolder, "main.tsx"),
-    code.mainTsx(),
-    { encoding: "utf-8" },
-  );
+  await fsp.writeFile(path.join(backgroundFolder, "main.tsx"), code.mainTsx(), {
+    encoding: "utf-8",
+  });
 
   const newManifest = {
     ...manifest,
     background: {
       page: "/background",
     },
-  }
+  };
   await fsp.writeFile(
     extensionJsonPath,
     JSON.stringify(newManifest, undefined, 2),
     "utf-8",
   );
-};
+}
