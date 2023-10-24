@@ -18,7 +18,8 @@ export function trailingSlashMiddleware(root: string, publicDir: string) {
     const fsPath = path.join(root, url.pathname!);
     console.log({ pathname: url.pathname });
     if (dirExists(fsPath) && !url.pathname!.endsWith("/")) {
-      res.writeHead(302, { Location: url.pathname + "/" });
+      const newLocation = url.pathname! + "/" + (url.search ? url.search : "");
+      res.writeHead(302, { Location: newLocation });
       res.end();
 
       return;
