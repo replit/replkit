@@ -12,7 +12,11 @@ import cac from "cac";
 import path from "path";
 import readline from "readline";
 import json5 from "json5";
-import { scaffoldTool, scaffoldFileHandler, scaffoldBackground } from "./scaffold";
+import {
+  scaffoldTool,
+  scaffoldFileHandler,
+  scaffoldBackground,
+} from "./scaffold";
 import { installReplkit } from "./upgrade";
 
 function resolvePath(userPath) {
@@ -97,79 +101,84 @@ async function getConfiguration(homeDir?: string) {
   };
 }
 
-cli.option('-C, --home-dir <homeDir>', 'The extension\'s home directory. Assumes the current directory if not provided', { default: process.cwd() });
+cli.option(
+  "-C, --home-dir <homeDir>",
+  "The extension's home directory. Assumes the current directory if not provided",
+  { default: process.cwd() },
+);
 
-cli
-  .command("dev", "Run the replkit dev server")
-  .action(async (options) => {
-    const { config, homeDirectory, publicDir, root, extensionJsonPath } =
-      await getConfiguration(options.homeDir);
+cli.command("dev", "Run the replkit dev server").action(async (options) => {
+  const { config, homeDirectory, publicDir, root, extensionJsonPath } =
+    await getConfiguration(options.homeDir);
 
-    console.log(`Running in ${homeDirectory}`);
+  console.log(`Running in ${homeDirectory}`);
 
-    const server = await createServer(config);
+  const server = await createServer(config);
 
-    // serve extension.json using config file
-    server.middlewares.use("/extension.json", (req, res) => {
-      const content = fs.readFileSync(extensionJsonPath, "utf-8");
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(content);
-    });
-
-    // If a /directory is requested, redirect to /directory/ (with the trailing slash) to preserve web behavior
-    server.middlewares.use(trailingSlashMiddleware(root, publicDir));
-
-    // If requested file doesn't exist, fall back to index.html
-    server.middlewares.use(htmlFallbackMiddleware(root, publicDir, false));
-
-    // Process and serve index.html
-    server.middlewares.use(indexHtmlMiddleware(server));
-
-    // Return 404 if not found
-    server.middlewares.use(function vite404Middleware(_, res) {
-      res.statusCode = 404;
-      res.end();
-    });
-
-    console.log("Starting server...");
-    await server.listen();
-    console.log(
-      `Replit extension dev server is active. Visit Extension Devtools and click on 'Load Locally'`,
-    );
-
-    fs.watchFile(
-      extensionJsonPath,
-      { persistent: true, interval: 1000 },
-      (eventType, filename) => {
-        // The  is the Replit prompt symbol
-        console.log(
-          " extension.json changed, you may need to reload your extension to see changes",
-        );
-      },
-    );
+  // serve extension.json using config file
+  server.middlewares.use("/extension.json", (req, res) => {
+    const content = fs.readFileSync(extensionJsonPath, "utf-8");
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(content);
   });
 
-cli
-  .command("build", "Build extension")
-  .action(async (options) => {
-    const {
-      config,
-      homeDirectory,
-      publicDir,
-      root,
-      extensionJsonPath,
-      outDir,
-    } = await getConfiguration(options.homeDir);
-    const output = await build(config);
-    // TODO: figure out if there's a more idiomatic way to do this with vite / rollup
-    fs.copyFileSync(extensionJsonPath, `${outDir}/extension.json`);
+  // If a /directory is requested, redirect to /directory/ (with the trailing slash) to preserve web behavior
+  server.middlewares.use(trailingSlashMiddleware(root, publicDir));
+
+  // If requested file doesn't exist, fall back to index.html
+  server.middlewares.use(htmlFallbackMiddleware(root, publicDir, false));
+
+  // Process and serve index.html
+  server.middlewares.use(indexHtmlMiddleware(server));
+
+  // Return 404 if not found
+  server.middlewares.use(function vite404Middleware(_, res) {
+    res.statusCode = 404;
+    res.end();
   });
+
+  console.log("Starting server...");
+  await server.listen();
+  console.log(
+    `Replit extension dev server is active. Visit Extension Devtools and click on 'Load Locally'`,
+  );
+
+  fs.watchFile(
+    extensionJsonPath,
+    { persistent: true, interval: 1000 },
+    (eventType, filename) => {
+      // The  is the Replit prompt symbol
+      console.log(
+        " extension.json changed, you may need to reload your extension to see changes",
+      );
+    },
+  );
+});
+
+cli.command("build", "Build extension").action(async (options) => {
+  const { config, homeDirectory, publicDir, root, extensionJsonPath, outDir } =
+    await getConfiguration(options.homeDir);
+  const output = await build(config);
+  // TODO: figure out if there's a more idiomatic way to do this with vite / rollup
+  fs.copyFileSync(extensionJsonPath, `${outDir}/extension.json`);
+});
 
 const cyan = (str: string) => `\x1b[36m${str}\x1b[0m`;
 
 cli
-  .command("add <feature>", `Add a feature to your extension. ${cyan('<feature>')} can be one of ${cyan('tool')}, ${cyan('file-handler')}, ${cyan('background')}`)
-  .usage(`add ${cyan('<feature>')}\tAdd a feature to your extension. ${cyan('<feature>')} can be one of ${cyan('tool')}, ${cyan('file-handler')}, ${cyan('background')}`)
+  .command(
+    "add <feature>",
+    `Add a feature to your extension. ${cyan("<feature>")} can be one of ${cyan(
+      "tool",
+    )}, ${cyan("file-handler")}, ${cyan("background")}`,
+  )
+  .usage(
+    `add ${cyan("<feature>")}\tAdd a feature to your extension. ${cyan(
+      "<feature>",
+    )} can be one of ${cyan("tool")}, ${cyan("file-handler")}, ${cyan(
+      "background",
+    )}`,
+  )
   .action(async (feature, options) => {
     const {
       config,
@@ -223,17 +232,15 @@ cli
 cli
   .command("upgrade", "Upgrade replkit to the latest version")
   .action(async (options) => {
-    const { homeDirectory } =
-      await getConfiguration(options.homeDir);
+    const { homeDirectory } = await getConfiguration(options.homeDir);
 
     await installReplkit({
       homeDirectory,
       version: "latest",
     });
-  })
+  });
 
 cli.help();
-
 
 async function main() {
   try {
