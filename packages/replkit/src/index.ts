@@ -165,8 +165,11 @@ cli
     fs.copyFileSync(extensionJsonPath, `${outDir}/extension.json`);
   });
 
+const cyan = (str: string) => `\x1b[36m${str}\x1b[0m`;
+
 cli
-  .command("add <feature>", "Add a feature to your extension")
+  .command("add <feature>", `Add a feature to your extension. ${cyan('<feature>')} can be one of ${cyan('tool')}, ${cyan('file-handler')}, ${cyan('background')}`)
+  .usage(`add ${cyan('<feature>')}\tAdd a feature to your extension. ${cyan('<feature>')} can be one of ${cyan('tool')}, ${cyan('file-handler')}, ${cyan('background')}`)
   .action(async (feature, options) => {
     const {
       config,
@@ -211,6 +214,7 @@ cli
       await scaffoldBackground({ root, extensionJsonPath });
     } else {
       console.log(`Unknown feature: ${feature}`);
+      cli.outputHelp();
     }
 
     rl.close();
