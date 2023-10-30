@@ -54,7 +54,7 @@ export async function injectSourcesContent(
   // …to log the missing sources.
   if (missingSources.length) {
     console.log(`Sourcemap for "${file}" points to missing source files`);
-    debug?.(`Missing sources:\n  ` + missingSources.join(`\n  `));
+    // debug?.(`Missing sources:\n  ` + missingSources.join(`\n  `));
   }
 }
 
@@ -70,9 +70,9 @@ export function getCodeWithSourcemap(
   code: string,
   map: SourceMap,
 ): string {
-  if (debug) {
-    code += `\n/*${JSON.stringify(map, null, 2).replace(/\*\//g, "*\\/")}*/\n`;
-  }
+  // if (debug) {
+  //   code += `\n/*${JSON.stringify(map, null, 2).replace(/\*\//g, "*\\/")}*/\n`;
+  // }
 
   if (type === "js") {
     code += `\n//# sourceMappingURL=${genSourceMapUrl(map)}`;

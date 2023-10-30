@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import fsp from "node:fs/promises";
 import path from "node:path";
-import { ViteDevServer, SendOptions } from "vite";
+import { ViteDevServer, SendOptions, Connect } from "vite";
 import os from "node:os";
 import { IncomingMessage, ServerResponse } from "node:http";
 import getEtag from "etag";
