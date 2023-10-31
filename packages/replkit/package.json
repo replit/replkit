@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "esbuild src/index.ts --bundle --outfile=dist/index.js --platform=node --external:lightningcss --external:vite",
     "clean": "rm -rf dist",
-    "lint": "npx prettier --write *.ts"
+    "lint": "npx prettier --write *.ts",
+    "type:check": "tsc --noEmit"
   },
   "bin": {
     "replkit": "./dist/index.js"

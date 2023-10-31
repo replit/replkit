@@ -11,12 +11,15 @@
     "dev": "npx turbo run build && ./packages/replkit/dist/index.js -C ./packages/template dev",
     "replkit": "npx turbo run build && ./packages/replkit/dist/index.js -C ./packages/template",
     "publish:replkit": "npx turbo run build && cd packages/replkit && pnpm publish",
-    "lint": "npx turbo run lint"
+    "lint": "npx turbo run lint",
+    "type:check": "npx turbo run type:check"
   },
   "devDependencies": {
     "turbo": "^1.10.12"
   },
   "dependencies": {
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
     "prettier": "^3.0.2"
   }
 }

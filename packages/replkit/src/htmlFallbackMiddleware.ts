@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import history from "connect-history-api-fallback";
-import type { Connect } from "@types/connect";
+import type { NextHandleFunction } from "connect";
 import { parse as urlParse } from "url";
 
 function fileExists(path: string) {
@@ -32,7 +32,7 @@ export function htmlFallbackMiddleware(
   root: string,
   publicDir: string,
   spaFallback: boolean,
-): Connect.NextHandleFunction {
+): NextHandleFunction {
   const historyHtmlFallbackMiddleware = history({
     // support /dir/ without explicit index.html
     rewrites: [

@@ -1,13 +1,15 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
     dependencies:
+      '@types/react':
+        specifier: ^18.2.31
+        version: 18.2.31
+      '@types/react-dom':
+        specifier: ^18.2.14
+        version: 18.2.14
       prettier:
         specifier: ^3.0.2
         version: 3.0.2
@@ -95,20 +97,27 @@ importers:
   packages/template:
     dependencies:
       '@replit/extensions':
-        specifier: ^1.8.0
-        version: 1.8.0
+        specifier: ^1.9.0
+        version: 1.9.0
       '@replit/extensions-react':
-        specifier: ^0.4.1
-        version: 0.4.1(@replit/extensions@1.8.0)(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^0.6.0
+        version: 0.6.0(@replit/extensions@1.9.0)(react@18.2.0)
       '@replit/replkit':
-        specifier: ^0.0.4
-        version: 0.0.4
+        specifier: ^0.0.5
+        version: link:../replkit
       react:
         specifier: ^18.2.0
         version: 18.2.0
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.31
+        version: 18.2.31
+      '@types/react-dom':
+        specifier: ^18.2.14
+        version: 18.2.14
 
 packages:
 
@@ -746,65 +755,26 @@ packages:
     engines: {node: '>= 16'}
     dev: false
 
-  /@replit/extensions-react@0.4.1(@replit/extensions@1.8.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-CW+AjoGT8oeu7ZtBRzNRQO0e5nzEBW7KbqmbsOjZvafHc8BjBJ57oHx+nIv6jvP3N82WzktYM86ExdgjUsXRZw==}
+  /@replit/extensions-react@0.6.0(@replit/extensions@1.9.0)(react@18.2.0):
+    resolution: {integrity: sha512-4+SoKbm8zFLrYUPxChkjIkLzLT719LcSY+wCL2l2yTWc4OYy96y25ZO0Mv1JpFduFywfrPYritb8wQJ9gYPkBg==}
     peerDependencies:
       '@replit/extensions': '>=1.x'
       react: '>=17.0.0'
-      react-dom: '>=17.0.0'
     dependencies:
-      '@replit/extensions': 1.8.0
-      '@types/react': 18.2.21
-      '@types/react-dom': 18.2.7
+      '@replit/extensions': 1.9.0
+      '@types/react': 18.2.31
+      jotai: 2.4.3(@types/react@18.2.31)(react@18.2.0)
       react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@replit/extensions@1.8.0:
-    resolution: {integrity: sha512-LZOABPU5S+r+3/l6/8bChS7lAnqEjfjK+iYjrjaULbUHWtrXvmOLdvJhW6dCN300rlrNK4kz8cCNOvb+KTPV/A==}
+  /@replit/extensions@1.9.0:
+    resolution: {integrity: sha512-UXh7naMsFKNM3i3jKccAT2fo0pELa6+YDA7B0iESuD97y/fkv95vMgBsJBmrTQh+V9sES1FFWEnL7AysVrEsCg==}
     dependencies:
       '@codemirror/state': 6.2.1
       '@noble/curves': 1.1.0
       '@root/asn1': 1.0.0
       b64u-lite: 1.1.0
       comlink: 4.4.1
-    dev: false
-
-  /@replit/replkit@0.0.4:
-    resolution: {integrity: sha512-inTK+giHcVA9i3Ptz9M5eVzZwNGGaZAcx5rPrsxTZT/0KS5yI1anXdgVbpglQUCChXMr/erAacdvTT34xmTnPA==}
-    hasBin: true
-    dependencies:
-      '@types/connect': 3.4.35
-      '@types/cors': 2.8.13
-      '@types/etag': 1.8.1
-      '@types/node': 18.0.6
-      cac: 6.7.14
-      chokidar: 3.5.3
-      connect: 3.7.0
-      connect-history-api-fallback: 2.0.0
-      cors: 2.8.5
-      etag: 1.8.1
-      events: 3.3.0
-      json5: 2.2.3
-      launch-editor-middleware: 2.6.0
-      magic-string: 0.30.2
-      node-fetch: 3.2.6
-      picocolors: 1.0.0
-      picomatch: 2.3.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      rollup: 3.28.0
-      tsx: 3.12.7
-      url: 0.11.1
-      vite: 4.4.9(@types/node@18.0.6)
-    transitivePeerDependencies:
-      - less
-      - lightningcss
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
     dev: false
 
   /@root/asn1@1.0.0:
@@ -841,25 +811,21 @@ packages:
 
   /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
-    dev: false
 
-  /@types/react-dom@18.2.7:
-    resolution: {integrity: sha512-GRaAEriuT4zp9N4p1i8BDBYmEyfo+xQ3yHjJU4eiK5NDa1RmUZG+unZABUTK4/Ox/M+GaHwb6Ow8rUITrtjszA==}
+  /@types/react-dom@18.2.14:
+    resolution: {integrity: sha512-V835xgdSVmyQmI1KLV2BEIUgqEuinxp9O4G6g3FqO/SqLac049E53aysv0oEFD2kHfejeKU+ZqL2bcFWj9gLAQ==}
     dependencies:
-      '@types/react': 18.2.21
-    dev: false
+      '@types/react': 18.2.31
 
-  /@types/react@18.2.21:
-    resolution: {integrity: sha512-neFKG/sBAwGxHgXiIxnbm3/AAVQ/cMRS93hvBpg8xYRbeQSPVABp9U2bRnPf0iI4+Ucdv3plSxKK+3CW2ENJxA==}
+  /@types/react@18.2.31:
+    resolution: {integrity: sha512-c2UnPv548q+5DFh03y8lEDeMfDwBn9G3dRwfkrxQMo/dOtRHUUO57k6pHvBIfH/VF4Nh+98mZ5aaSe+2echD5g==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
       csstype: 3.1.2
-    dev: false
 
   /@types/scheduler@0.16.3:
     resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}
-    dev: false
 
   /anymatch@3.1.3:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
@@ -959,7 +925,6 @@ packages:
 
   /csstype@3.1.2:
     resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
-    dev: false
 
   /data-uri-to-buffer@4.0.1:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
@@ -1200,6 +1165,22 @@ packages:
   /is-number@7.0.0:
     resolution: {integrity: sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==}
     engines: {node: '>=0.12.0'}
+    dev: false
+
+  /jotai@2.4.3(@types/react@18.2.31)(react@18.2.0):
+    resolution: {integrity: sha512-CSAHX9LqWG5WCrU8OgBoZbBJ+Bo9rQU0mPusEF4e0CZ/SNFgurG26vb3UpgvCSJZgYVcUQNiUBM5q86PA8rstQ==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=17.0.0'
+      react: '>=17.0.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.2.31
+      react: 18.2.0
     dev: false
 
   /js-tokens@4.0.0:
@@ -1541,3 +1522,7 @@ packages:
     resolution: {integrity: sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==}
     engines: {node: '>= 8'}
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
