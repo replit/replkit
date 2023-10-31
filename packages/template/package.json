@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx prettier --write src/*",
-    "clean": "rm -rf dist/"
+    "clean": "rm -rf dist/",
+    "type:check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
