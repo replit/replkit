@@ -1,3 +1,9 @@
+## 0.0.6
+
+- Fixes to scaffolding
+- Fixes to rewrite logic
+- Better help text for `replkit add`
+
 ## 0.0.5
 
 - simple upgrade command
