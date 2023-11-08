@@ -97,14 +97,14 @@ importers:
   packages/template:
     dependencies:
       '@replit/extensions':
-        specifier: ^1.9.0
-        version: 1.9.0
+        specifier: ^1.10.0
+        version: 1.10.0
       '@replit/extensions-react':
         specifier: ^0.6.0
-        version: 0.6.0(@replit/extensions@1.9.0)(react@18.2.0)
+        version: 0.6.0(@replit/extensions@1.10.0)(react@18.2.0)
       '@replit/replkit':
         specifier: ^0.0.5
-        version: link:../replkit
+        version: 0.0.5
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -755,26 +755,63 @@ packages:
     engines: {node: '>= 16'}
     dev: false
 
-  /@replit/extensions-react@0.6.0(@replit/extensions@1.9.0)(react@18.2.0):
+  /@replit/extensions-react@0.6.0(@replit/extensions@1.10.0)(react@18.2.0):
     resolution: {integrity: sha512-4+SoKbm8zFLrYUPxChkjIkLzLT719LcSY+wCL2l2yTWc4OYy96y25ZO0Mv1JpFduFywfrPYritb8wQJ9gYPkBg==}
     peerDependencies:
       '@replit/extensions': '>=1.x'
       react: '>=17.0.0'
     dependencies:
-      '@replit/extensions': 1.9.0
+      '@replit/extensions': 1.10.0
       '@types/react': 18.2.31
       jotai: 2.4.3(@types/react@18.2.31)(react@18.2.0)
       react: 18.2.0
     dev: false
 
-  /@replit/extensions@1.9.0:
-    resolution: {integrity: sha512-UXh7naMsFKNM3i3jKccAT2fo0pELa6+YDA7B0iESuD97y/fkv95vMgBsJBmrTQh+V9sES1FFWEnL7AysVrEsCg==}
+  /@replit/extensions@1.10.0:
+    resolution: {integrity: sha512-KUME3xkj7BoVHDLStWs9cr39ZxoBT6i8C82iqCfxvm25dXWtqzOo39l14QSr9n9TuWe4T7iE69ED6bYl0tpXcw==}
     dependencies:
       '@codemirror/state': 6.2.1
       '@noble/curves': 1.1.0
       '@root/asn1': 1.0.0
       b64u-lite: 1.1.0
       comlink: 4.4.1
+    dev: false
+
+  /@replit/replkit@0.0.5:
+    resolution: {integrity: sha512-XgjgTjJcC6+OQAWNFptkHoFLeSYYKZWsiGdqw7UixKg5vv+jxY8g1WGkmmh2lm5wI/JG9e1dD4e1snAJVVaTlw==}
+    hasBin: true
+    dependencies:
+      '@types/connect': 3.4.35
+      '@types/cors': 2.8.13
+      '@types/etag': 1.8.1
+      '@types/node': 18.0.6
+      cac: 6.7.14
+      chokidar: 3.5.3
+      connect: 3.7.0
+      connect-history-api-fallback: 2.0.0
+      cors: 2.8.5
+      etag: 1.8.1
+      events: 3.3.0
+      json5: 2.2.3
+      launch-editor-middleware: 2.6.0
+      magic-string: 0.30.2
+      node-fetch: 3.2.6
+      picocolors: 1.0.0
+      picomatch: 2.3.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      rollup: 3.28.0
+      tsx: 3.12.7
+      url: 0.11.1
+      vite: 4.4.9(@types/node@18.0.6)
+    transitivePeerDependencies:
+      - less
+      - lightningcss
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
     dev: false
 
   /@root/asn1@1.0.0:
