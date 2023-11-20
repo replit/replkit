@@ -19,7 +19,7 @@ export function trailingSlashMiddleware(root: string, publicDir: string) {
     console.log({ pathname: url.pathname });
     if (dirExists(fsPath) && !url.pathname!.endsWith("/")) {
       // Redirect to the same URL but with trailing slash
-      const newLocation = url.pathname + '/' + url.search + url.hash
+      const newLocation = url.pathname + '/' + (url.search ?? "") + (url.hash ?? "")
       res.writeHead(302, { Location: newLocation });
       res.end();
 
