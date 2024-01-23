@@ -14,6 +14,7 @@ import readline from "readline";
 import json5 from "json5";
 import { scaffoldTool, scaffoldFileHandler, scaffoldBackground } from "./scaffold";
 import { installReplkit } from "./upgrade";
+import { deepMerge } from "./util/deepMerge";
 
 function resolvePath(userPath) {
   return path.resolve(process.cwd(), userPath);
@@ -52,13 +53,20 @@ function resolveHomeDirectory(homeDir?: string) {
   return homeDir ? resolvePath(homeDir) : process.cwd();
 }
 
-async function getConfiguration(homeDir?: string) {
-  const homeDirectory = resolveHomeDirectory(homeDir);
-  const root = path.join(homeDirectory, "src");
-  const publicDir = homeDirectory + "/public";
-  const outDir = `${homeDirectory}/dist`;
-  const pages = await getPages(root);
-  const config: InlineConfig = {
+let getDefaultConfig = ({
+  homeDirectory,
+  root,
+  publicDir,
+  outDir,
+  pages
+}: {
+  homeDirectory: string;
+  root: string;
+  publicDir: string;
+  outDir: string;
+  pages: Array<{ name: string; path: string }>;
+}) => {
+  return {
     root,
     publicDir,
     appType: "custom",
@@ -84,6 +92,32 @@ async function getConfiguration(homeDir?: string) {
     },
     logLevel: "info",
   };
+}
+
+async function getConfiguration(homeDir?: string) {
+  const homeDirectory = resolveHomeDirectory(homeDir);
+  const root = path.join(homeDirectory, "src");
+  const publicDir = homeDirectory + "/public";
+  const outDir = `${homeDirectory}/dist`;
+  const pages = await getPages(root);
+
+  const defaultConfig = getDefaultConfig({
+    homeDirectory,
+    root,
+    publicDir,
+    outDir,
+    pages
+  });
+
+
+  const customConfigPath = `${homeDirectory}/vite.config.custom.js`;
+  let customConfig = {};
+
+  if (fs.existsSync(customConfigPath)) {
+    customConfig = await import(customConfigPath);
+  }
+
+  const config: InlineConfig = deepMerge(defaultConfig, customConfig);
 
   const extensionJsonPath = `${homeDirectory}/extension.json`;
 
